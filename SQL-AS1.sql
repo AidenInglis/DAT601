@@ -1,4 +1,8 @@
 --Create Tables
+USE MASTER;
+GO
+DROP DATABASE IF EXISTS DAT601_AS1;
+GO
 CREATE DATABASE DAT601_AS1;
 GO
 USE DAT601_AS1;
@@ -280,4 +284,28 @@ SELECT * FROM vProductCustomer
 
 --SQL SERVER VIEWS QUERY 14
 --FOR THIS QUERY THIS NEEDS TO BE EXECUTED BY ITS SELF IN PIECES AS IT IS REFUSING TO RUN AS A WHOLE
-INSERT INTO Customer(CustID, CustName, CustPhone) VALUES ('1000000006', 'The Toy Emporium', '09-546-8552')GO--DROP VIEWS IF EXISTSDROP VIEW IF EXISTS vCustomerMailingLabelGO--CREATE THE VIEWCREATE VIEW vCustomerMailingLabel ASSELECT CustName, CustAddress, CustCity, CustPhoneFROM Customer WHERE CustAddress != '' OR CustCity != ''GO--QUERY THE VIEWSELECT * FROM vCustomerMailingLabel
+INSERT INTO Customer(CustID, CustName, CustPhone) 
+VALUES ('1000000006', 'The Toy Emporium', '09-546-8552')
+GO
+
+--DROP VIEWS IF EXISTS
+DROP VIEW IF EXISTS vCustomerMailingLabel
+GO
+
+--CREATE THE VIEW
+CREATE VIEW vCustomerMailingLabel AS
+SELECT CustName, CustAddress, CustCity, CustPhone
+FROM Customer WHERE CustAddress <> '' OR CustCity <> ''
+GO
+
+--QUERY THE VIEW
+SELECT * FROM vCustomerMailingLabel
+
+--SQL TEST WITH TODD
+SELECT c.CustName, c.CustEmail, oe.OrderID, OE.OrderDate, O.OrderItem, p.ProductName, v.VendorName, v.VendorCity
+FROM Customer c
+JOIN OrderEntry oe ON c.CustID = oe.CustID
+JOIN OrderItem o ON oe.OrderID = o.OrderID
+JOIN Product p ON o.ProductID = p.ProductID
+JOIN Vendor v ON p.VendorID = v.VendorID
+WHERE CustCity <> VendorCity;
